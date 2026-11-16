@@ -500,7 +500,7 @@ export default function OrganizerDetailPage() {
                     {data.memberViews ?? 0}
                   </p>
                 </div>
-                <div className="h-12 w-12 rounded-full bg-purple-500/10 flex items-center justify-center">
+                <div className="h-12 w-12 rounded-full bg-sage flex items-center justify-center">
                   <Eye className="h-6 w-6 text-olive" />
                 </div>
               </div>

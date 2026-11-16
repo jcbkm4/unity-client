@@ -328,7 +328,7 @@ const AttendeeListModal: React.FC<AttendeeListModalProps> = ({
               <TabsTrigger value="completed" className="relative">
                 Completed
                 {completedAttendees.length > 0 && (
-                  <Badge className="ml-2 bg-purple-500 text-white text-xs px-2">
+                  <Badge className="ml-2 bg-olive text-white text-xs px-2">
                     {completedAttendees.length}
                   </Badge>
                 )}
