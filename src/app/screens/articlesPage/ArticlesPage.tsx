@@ -89,17 +89,12 @@ export default function ArticlesPage() {
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <div className="flex items-center gap-2">
-            <Newspaper className="h-5 w-5 text-primary" />
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-              Community Articles
-            </h1>
-          </div>
-          <p className="mt-2 text-sm text-muted-foreground max-w-xl">
-            Read stories, insights, and updates from organizers and volunteers
-            shaping their communities.
+      <div className="flex flex-col gap-6 border-b border-border pb-10 md:flex-row md:items-end md:justify-between">
+        <div className="max-w-3xl">
+          <span className="eyebrow-pill">Community stories</span>
+          <h1 className="display-lg mt-4 text-foreground">Stories from the field.</h1>
+          <p className="lead mt-4 max-w-2xl">
+            Organizers and volunteers share what happened, what they learned and what comes next.
           </p>
         </div>
 
@@ -112,12 +107,10 @@ export default function ArticlesPage() {
               setShowLoginAlert(true);
             }
           }}
-          className="inline-flex items-center justify-center rounded-[var(--radius-lg)] border border-border bg-background/40 px-4 py-2 text-sm font-semibold text-foreground hover:bg-background/60 transition-colors"
+          className="btn-pill"
         >
-          Write an Article
-          <span className="ml-2 text-primary" aria-hidden="true">
-            →
-          </span>
+          Write a story
+          <span aria-hidden="true">→</span>
         </button>
       </div>
 
@@ -128,7 +121,7 @@ export default function ArticlesPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search articles…"
-            className="h-11 w-full rounded-[var(--radius-lg)] border border-border bg-background/40 pl-10 pr-4 text-sm text-foreground outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
+            className="h-11 w-full rounded-2xl border border-border bg-background pl-10 pr-4 text-sm text-foreground outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
           />
         </div>
 
@@ -138,7 +131,7 @@ export default function ArticlesPage() {
             <select
               value={order}
               onChange={(e) => setOrder(e.target.value as ArticleOrder)}
-              className="h-11 rounded-[var(--radius-lg)] border border-border bg-background/40 pl-10 pr-4 text-sm text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="h-11 rounded-2xl border border-border bg-background pl-10 pr-4 text-sm text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               {ORDER_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>
@@ -158,14 +151,14 @@ export default function ArticlesPage() {
               setPage(1);
               setSearchParams(next);
             }}
-            className="h-11 px-4 rounded-[var(--radius-lg)] border border-border bg-background/40 text-sm font-semibold text-foreground hover:bg-background/60 transition-colors"
+            className="h-11 px-4 rounded-2xl border border-border bg-background text-sm font-semibold text-foreground hover:bg-background transition-colors"
           >
             Apply
           </button>
         </div>
       </div>
 
-      <div className="rounded-[var(--radius-lg)] border border-border bg-card/30 p-4">
+      <div className="rounded-2xl border border-border bg-card p-4">
         {isLoading ? (
           <div className="text-muted-foreground">Loading articles…</div>
         ) : isError ? (
@@ -195,7 +188,7 @@ export default function ArticlesPage() {
                     to={`/articles/${article._id}`}
                     className="group block"
                   >
-                    <article className="flex h-full flex-col overflow-hidden rounded-xl border border-border bg-background/30 transition-colors hover:bg-background/40">
+                    <article className="flex h-full flex-col overflow-hidden rounded-xl border border-border bg-background transition-colors hover:bg-background">
                       <div className="relative aspect-[16/9] w-full bg-muted flex-shrink-0">
                         {cover ? (
                           <img
@@ -275,7 +268,7 @@ export default function ArticlesPage() {
                     setSearchParams(next);
                   }}
                   disabled={page <= 1}
-                  className="h-10 px-3 rounded-[var(--radius-lg)] border border-border bg-background/40 text-sm font-semibold text-foreground hover:bg-background/60 disabled:opacity-50"
+                  className="h-10 px-3 rounded-2xl border border-border bg-background text-sm font-semibold text-foreground hover:bg-background disabled:opacity-50"
                 >
                   Prev
                 </button>
@@ -291,10 +284,10 @@ export default function ArticlesPage() {
                       setPage(p);
                       setSearchParams(next);
                     }}
-                    className={`h-10 w-10 rounded-[var(--radius-lg)] border text-sm font-semibold transition-colors ${
+                    className={`h-10 w-10 rounded-2xl border text-sm font-semibold transition-colors ${
                       p === page
                         ? "border-primary bg-primary text-primary-foreground"
-                        : "border-border bg-background/40 text-foreground hover:bg-background/60"
+                        : "border-border bg-background text-foreground hover:bg-background"
                     }`}
                   >
                     {p}
@@ -312,7 +305,7 @@ export default function ArticlesPage() {
                     setSearchParams(next);
                   }}
                   disabled={page >= totalPages}
-                  className="h-10 px-3 rounded-[var(--radius-lg)] border border-border bg-background/40 text-sm font-semibold text-foreground hover:bg-background/60 disabled:opacity-50"
+                  className="h-10 px-3 rounded-2xl border border-border bg-background text-sm font-semibold text-foreground hover:bg-background disabled:opacity-50"
                 >
                   Next
                 </button>

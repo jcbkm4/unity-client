@@ -36,7 +36,7 @@ export default function ProfileOverview({
 
           {/* Info */}
           <div className="space-y-2">
-            <h1 className="text-3xl font-extrabold tracking-tight text-foreground">
+            <h1 className="display-lg text-foreground">
               {member.memberNick}
             </h1>
             <p className="text-sm text-muted-foreground">

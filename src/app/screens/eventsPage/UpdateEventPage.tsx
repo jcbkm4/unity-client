@@ -11,6 +11,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Loader2,
+  AlertCircle,
+  CheckCircle,
 } from "lucide-react";
 import { useCheckAuthQuery } from "../../services/authApi";
 import {
@@ -277,7 +279,7 @@ export default function UpdateEventPage() {
   if (!isOrganizer) {
     return (
       <div className="max-w-4xl mx-auto py-12 space-y-4">
-        <h1 className="text-2xl font-bold text-foreground">
+        <h1 className="display-lg text-foreground">
           Organizer access required
         </h1>
         <p className="text-muted-foreground">
@@ -329,7 +331,7 @@ export default function UpdateEventPage() {
             {/* What You Can Do */}
             <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
               <h3 className="font-bold text-foreground mb-4 flex items-center gap-2">
-                <Users className="h-5 w-5 text-blue-600" />
+                <Users className="h-5 w-5 text-olive" />
                 In the Meantime
               </h3>
               <div className="space-y-2 text-sm text-muted-foreground">
@@ -370,7 +372,7 @@ export default function UpdateEventPage() {
   if (!eventData) {
     return (
       <div className="max-w-4xl mx-auto py-12 space-y-4">
-        <h1 className="text-2xl font-bold text-foreground">Event not found</h1>
+        <h1 className="display-lg text-foreground">Event not found</h1>
         <Link to="/events" className="text-primary hover:underline">
           ← Back to Events
         </Link>
@@ -382,7 +384,7 @@ export default function UpdateEventPage() {
   if (eventData.memberId !== authData?.member?._id) {
     return (
       <div className="max-w-4xl mx-auto py-12 space-y-4">
-        <h1 className="text-2xl font-bold text-foreground">Access denied</h1>
+        <h1 className="display-lg text-foreground">Access denied</h1>
         <p className="text-muted-foreground">
           You can only edit your own events.
         </p>
@@ -407,7 +409,7 @@ export default function UpdateEventPage() {
           <ArrowLeft className="h-5 w-5" />
           Cancel
         </button>
-        <h1 className="text-4xl font-extrabold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+        <h1 className="display-lg text-foreground">
           Edit Event
         </h1>
         <p className="text-muted-foreground mt-2">Update your event details</p>
@@ -721,7 +723,7 @@ export default function UpdateEventPage() {
           <button
             type="submit"
             disabled={updateState.isLoading}
-            className="flex-1 px-6 py-3 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold hover:from-purple-700 hover:to-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="flex-1 px-6 py-3 rounded-lg bg-gradient-to-r from-olive to-lime text-white font-semibold hover:from-olive hover:to-forest transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {updateState.isLoading ? (
               <>

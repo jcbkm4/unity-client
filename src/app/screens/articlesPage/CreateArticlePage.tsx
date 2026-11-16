@@ -89,7 +89,7 @@ export default function CreateArticlePage() {
 
   if (!isOrganizer) {
     return (
-      <div className="rounded-[var(--radius-lg)] border border-border bg-card/30 p-6 text-sm text-muted-foreground">
+      <div className="rounded-2xl border border-border bg-card p-6 text-sm text-muted-foreground">
         Only organizer accounts can create articles. Please log in with an
         organizer account.
       </div>
@@ -100,7 +100,7 @@ export default function CreateArticlePage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+          <h1 className="display-lg">
             Write an Article
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">
@@ -117,7 +117,7 @@ export default function CreateArticlePage() {
 
       <form
         onSubmit={handleSubmit}
-        className="rounded-[var(--radius-lg)] border border-border bg-card/30 p-6 space-y-6"
+        className="rounded-2xl border border-border bg-card p-6 space-y-6"
       >
         {error ? (
           <div className="flex items-start gap-2 rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
@@ -132,7 +132,7 @@ export default function CreateArticlePage() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Enter article title"
-            className="h-11 w-full rounded-[var(--radius-lg)] border border-border bg-background/40 px-4 text-sm text-foreground outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
+            className="h-11 w-full rounded-2xl border border-border bg-background px-4 text-sm text-foreground outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
           />
         </div>
 
@@ -144,7 +144,7 @@ export default function CreateArticlePage() {
             value={content}
             onChange={(e) => setContent(e.target.value)}
             rows={10}
-            className="w-full rounded-[var(--radius-lg)] border border-border bg-background/40 px-4 py-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring resize-y"
+            className="w-full rounded-2xl border border-border bg-background px-4 py-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring resize-y"
           />
           <div className="rounded-lg bg-muted/50 px-3 py-2 text-xs text-muted-foreground">
             <strong className="text-foreground">Markdown supported:</strong> Use
@@ -161,7 +161,7 @@ export default function CreateArticlePage() {
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="inline-flex items-center justify-center gap-2 rounded-[var(--radius-lg)] border border-border bg-background/40 px-4 py-3 text-sm font-semibold text-foreground hover:bg-background/60"
+              className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border bg-background px-4 py-3 text-sm font-semibold text-foreground hover:bg-background"
             >
               <ImagePlus className="h-4 w-4" />
               Upload Image
@@ -176,7 +176,7 @@ export default function CreateArticlePage() {
           </div>
 
           {preview ? (
-            <div className="relative mt-4 overflow-hidden rounded-[var(--radius-lg)] border border-border">
+            <div className="relative mt-4 overflow-hidden rounded-2xl border border-border">
               <img
                 src={preview}
                 alt="Preview"
@@ -198,7 +198,7 @@ export default function CreateArticlePage() {
           <button
             type="submit"
             disabled={createState.isLoading}
-            className="inline-flex items-center justify-center gap-2 rounded-[var(--radius-lg)] bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
           >
             {createState.isLoading ? (
               <>

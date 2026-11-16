@@ -40,7 +40,7 @@ export default function CompletedApplications({
             {/* Event Info */}
             <div className="flex-1 space-y-2 min-w-0">
               <div className="flex items-center gap-2">
-                <Zap className="h-4 w-4 text-purple-500" />
+                <Zap className="h-4 w-4 text-olive" />
                 <h3 className="font-semibold text-foreground truncate">
                   {app.eventData?.eventTitle || "Event"}
                 </h3>

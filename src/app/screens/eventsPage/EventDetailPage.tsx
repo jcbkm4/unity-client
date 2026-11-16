@@ -320,7 +320,7 @@ export default function EventDetailPage() {
   return (
     <div className="w-full min-h-screen bg-background">
       {/* Top Bar with Back and Create Event buttons */}
-      <div className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
+      <div className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background border-b border-border">
         <div className="mx-auto max-w-7xl px-4 py-4">
           <div className="flex items-center justify-between gap-4">
             {/* Back to Events Button */}
@@ -353,7 +353,7 @@ export default function EventDetailPage() {
           <div className="space-y-6">
             {/* Event Title */}
             <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
-              <h1 className="text-4xl font-extrabold tracking-tight text-foreground break-words">
+              <h1 className="display-lg text-foreground break-words">
                 {data.eventTitle}
               </h1>
             </div>

@@ -283,7 +283,7 @@ export default function OrganizerDashboard() {
       <div className="w-full min-h-screen bg-background py-12">
         <div className="mx-auto max-w-2xl px-4 text-center space-y-6">
           <AlertCircle className="h-16 w-16 text-destructive mx-auto" />
-          <h1 className="text-3xl font-bold text-foreground">
+          <h1 className="display-lg text-foreground">
             Organizer Access Required
           </h1>
           <p className="text-muted-foreground">
@@ -334,7 +334,7 @@ export default function OrganizerDashboard() {
         {/* Header & Quick Actions */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-4xl font-extrabold tracking-tight text-foreground">
+            <h1 className="display-lg text-foreground">
               Organizer Dashboard
             </h1>
             <p className="text-muted-foreground mt-2">
@@ -344,7 +344,7 @@ export default function OrganizerDashboard() {
           </div>
           <button
             onClick={() => navigate("/events/create")}
-            className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-primary to-primary/80 px-6 py-3 text-base font-bold text-primary-foreground shadow-lg hover:shadow-xl hover:from-primary/90 hover:to-primary/70 transition-all"
+            className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-primary to-primary/80 px-6 py-3 text-base font-bold text-primary-foreground shadow-lg hover:shadow-md hover:from-primary/90 hover:to-primary/70 transition-all"
           >
             <Plus className="h-5 w-5" />
             Create Event
@@ -385,8 +385,8 @@ export default function OrganizerDashboard() {
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">All events</p>
               </div>
-              <div className="h-12 w-12 rounded-full bg-blue-500/10 flex items-center justify-center">
-                <Eye className="h-6 w-6 text-blue-600" />
+              <div className="h-12 w-12 rounded-full bg-sage flex items-center justify-center">
+                <Eye className="h-6 w-6 text-olive" />
               </div>
             </div>
           </div>
@@ -403,8 +403,8 @@ export default function OrganizerDashboard() {
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">Engagement</p>
               </div>
-              <div className="h-12 w-12 rounded-full bg-pink-500/10 flex items-center justify-center">
-                <Heart className="h-6 w-6 text-pink-600 fill-pink-600" />
+              <div className="h-12 w-12 rounded-full bg-sage flex items-center justify-center">
+                <Heart className="h-6 w-6 text-olive fill-olive" />
               </div>
             </div>
           </div>
@@ -668,7 +668,7 @@ export default function OrganizerDashboard() {
                                             event.eventTitle || "Event",
                                         })
                                       }
-                                      className="text-purple-600 border-purple-300 hover:bg-purple-50 hidden sm:flex"
+                                      className="text-olive border-olive/30 hover:bg-sage hidden sm:flex"
                                     >
                                       <UserCheck className="h-4 w-4 mr-2" />
                                       <span className="hidden lg:inline">
@@ -676,7 +676,7 @@ export default function OrganizerDashboard() {
                                       </span>
                                       <span className="lg:hidden">Manage</span>
                                       {applicantsCount > 0 && (
-                                        <span className="ml-2 px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 text-xs font-semibold">
+                                        <span className="ml-2 px-2 py-0.5 rounded-full bg-sage text-olive text-xs font-semibold">
                                           {applicantsCount}
                                         </span>
                                       )}
@@ -693,7 +693,7 @@ export default function OrganizerDashboard() {
                                             event.eventTitle || "Event",
                                         })
                                       }
-                                      className="text-purple-600 border-purple-300 hover:bg-purple-50 sm:hidden"
+                                      className="text-olive border-olive/30 hover:bg-sage sm:hidden"
                                       title="Manage Applicants"
                                     >
                                       <UserCheck className="h-4 w-4" />
@@ -867,9 +867,9 @@ export default function OrganizerDashboard() {
                                     <div
                                       className={`h-full transition-all ${
                                         capacityPercent >= 100
-                                          ? "bg-green-600"
+                                          ? "bg-olive dark:bg-lime"
                                           : capacityPercent >= 75
-                                            ? "bg-yellow-600"
+                                            ? "bg-lime"
                                             : "bg-primary"
                                       }`}
                                       style={{
@@ -896,7 +896,7 @@ export default function OrganizerDashboard() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div className="rounded-xl border border-border bg-background p-6">
                   <h4 className="font-bold text-foreground mb-4 flex items-center gap-2">
-                    <Eye className="h-5 w-5 text-blue-600" />
+                    <Eye className="h-5 w-5 text-olive" />
                     Engagement Rate
                   </h4>
                   <div className="text-4xl font-extrabold text-primary mb-2">
@@ -947,7 +947,7 @@ export default function OrganizerDashboard() {
 
                 <div className="rounded-xl border border-border bg-background p-6">
                   <h4 className="font-bold text-foreground mb-4 flex items-center gap-2">
-                    <Heart className="h-5 w-5 text-pink-600" />
+                    <Heart className="h-5 w-5 text-olive" />
                     Like Rate
                   </h4>
                   <div className="text-4xl font-extrabold text-primary mb-2">
@@ -962,7 +962,7 @@ export default function OrganizerDashboard() {
 
                 <div className="rounded-xl border border-border bg-background p-6">
                   <h4 className="font-bold text-foreground mb-4 flex items-center gap-2">
-                    <TrendingUp className="h-5 w-5 text-emerald-600" />
+                    <TrendingUp className="h-5 w-5 text-olive" />
                     Application Rate
                   </h4>
                   <div className="text-4xl font-extrabold text-primary mb-2">

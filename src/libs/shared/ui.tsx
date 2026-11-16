@@ -67,34 +67,14 @@ export function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section style={{ marginBottom: 28 }}>
-      <h2 style={{ margin: 0, fontSize: 22, letterSpacing: 0.2 }}>{title}</h2>
-      {description ? (
-        <p
-          style={{ marginTop: 8, marginBottom: 16, color: "var(--text-muted)" }}
-        >
-          {description}
-        </p>
-      ) : (
-        <div style={{ height: 16 }} />
-      )}
-      {children}
+    <section className="mb-12">
+      <h2 className="text-2xl font-extrabold tracking-tight text-foreground md:text-3xl">{title}</h2>
+      {description ? <p className="mt-2 max-w-2xl text-[15px] leading-7 text-muted-foreground">{description}</p> : null}
+      <div className="mt-6">{children}</div>
     </section>
   );
 }
 
 export function Card({ children }: { children: React.ReactNode }) {
-  return (
-    <div
-      style={{
-        background: "var(--bg-card)",
-        border: "1px solid var(--border-color)",
-        borderRadius: "var(--radius-lg)",
-        boxShadow: "var(--shadow)",
-        padding: 16,
-      }}
-    >
-      {children}
-    </div>
-  );
+  return <div className="h-full rounded-2xl bg-card p-5 ring-1 ring-border transition-shadow hover:shadow-md">{children}</div>;
 }

@@ -15,7 +15,7 @@ export default function ApplicationsList({
     pending: <Clock className="h-4 w-4 text-primary" />,
     approved: <Check className="h-4 w-4 text-green-500" />,
     rejected: <X className="h-4 w-4 text-red-500" />,
-    completed: <Zap className="h-4 w-4 text-purple-500" />,
+    completed: <Zap className="h-4 w-4 text-olive" />,
   };
 
   if (apps.length === 0) {

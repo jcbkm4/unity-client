@@ -9,6 +9,7 @@ import TopOrganizersSection from "./topOrganizers";
 import LatestArticlesSection from "./latestArticles";
 import AdvertisementSection from "./advertisement";
 import FinalCtaSection from "./finalCta";
+import OrgToolsSection from "./orgTools";
 import { useScrollToTop } from "../../hooks/useScrollToTop";
 
 export default function HomePage() {
@@ -23,6 +24,7 @@ export default function HomePage() {
       <WhyJoinSection whyTab={whyTab} setWhyTab={setWhyTab} />
 
       <PopularEventsSection />
+      <OrgToolsSection />
       <TrendingEventsSection />
       <AdvertisementSection />
       <TopOrganizersSection />

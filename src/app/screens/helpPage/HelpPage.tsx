@@ -1,5 +1,6 @@
+import { PageHeader } from "@/libs/components/common/Headers";
 import { useState } from "react";
-import { Card, Section } from "../../../libs/shared/ui";
+import { Card } from "../../../libs/shared/ui";
 import { useScrollToTop } from "../../hooks/useScrollToTop";
 import {
   Tabs,
@@ -603,11 +604,13 @@ export default function HelpPage() {
   const filteredFAQs = getCurrentFAQs();
 
   return (
-    <div style={{ maxWidth: 900, margin: "0 auto" }}>
-      <Section
-        title="Help Center"
-        description="Find answers to common questions and learn how to use Unity."
-      >
+    <div className="mx-auto max-w-4xl">
+      <PageHeader
+        eyebrow="Help center"
+        title="How can we help?"
+        lead="Answers for volunteers and organizers: applying to events, verification, groups and your profile."
+      />
+      <div>
         {/* Search Bar */}
         <div style={{ marginBottom: 24 }}>
           <div
@@ -848,7 +851,7 @@ export default function HelpPage() {
             </button>
           </div>
         </Card>
-      </Section>
+      </div>
     </div>
   );
 }

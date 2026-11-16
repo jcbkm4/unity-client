@@ -267,7 +267,7 @@ export default function OrganizerDetailPage() {
               {/* Avatar */}
               <div className="flex-shrink-0 mx-auto md:mx-0">
                 <div className="relative">
-                  <div className="h-32 w-32 sm:h-40 sm:w-40 rounded-full border-4 border-background shadow-xl overflow-hidden bg-muted">
+                  <div className="h-32 w-32 sm:h-40 sm:w-40 rounded-full border-4 border-background shadow-md overflow-hidden bg-muted">
                     {organizerAvatar ? (
                       <img
                         src={organizerAvatar}
@@ -292,7 +292,7 @@ export default function OrganizerDetailPage() {
               <div className="flex-1 text-center md:text-left space-y-4">
                 <div>
                   <div className="flex flex-col sm:flex-row items-center md:items-start gap-3">
-                    <h1 className="text-3xl sm:text-4xl font-extrabold text-foreground">
+                    <h1 className="display-lg text-foreground">
                       {data.memberNick}
                     </h1>
                     <div className="flex items-center gap-2">
@@ -323,7 +323,7 @@ export default function OrganizerDetailPage() {
                   {/* Like Button */}
                   <button
                     type="button"
-                    className="inline-flex items-center gap-2 rounded-full border border-border bg-background/30 px-4 py-2 text-foreground disabled:cursor-not-allowed disabled:opacity-60"
+                    className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-4 py-2 text-foreground disabled:cursor-not-allowed disabled:opacity-60"
                     aria-label={likedSet.has(organizerId) ? "Unlike" : "Like"}
                     aria-pressed={
                       likedOverrides[organizerId] ?? likedSet.has(organizerId)
@@ -468,8 +468,8 @@ export default function OrganizerDetailPage() {
                     {data.eventsOrganizedCount ?? 0}
                   </p>
                 </div>
-                <div className="h-12 w-12 rounded-full bg-blue-500/10 flex items-center justify-center">
-                  <Calendar className="h-6 w-6 text-blue-600" />
+                <div className="h-12 w-12 rounded-full bg-sage flex items-center justify-center">
+                  <Calendar className="h-6 w-6 text-olive" />
                 </div>
               </div>
             </div>
@@ -501,7 +501,7 @@ export default function OrganizerDetailPage() {
                   </p>
                 </div>
                 <div className="h-12 w-12 rounded-full bg-purple-500/10 flex items-center justify-center">
-                  <Eye className="h-6 w-6 text-purple-600" />
+                  <Eye className="h-6 w-6 text-olive" />
                 </div>
               </div>
             </div>
@@ -516,8 +516,8 @@ export default function OrganizerDetailPage() {
                     {data.memberLikes ?? 0}
                   </p>
                 </div>
-                <div className="h-12 w-12 rounded-full bg-pink-500/10 flex items-center justify-center">
-                  <Heart className="h-6 w-6 text-pink-600" />
+                <div className="h-12 w-12 rounded-full bg-sage flex items-center justify-center">
+                  <Heart className="h-6 w-6 text-olive" />
                 </div>
               </div>
             </div>
@@ -715,7 +715,7 @@ export default function OrganizerDetailPage() {
         {/* Contact Modal */}
         {showContactModal && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-            <div className="bg-background rounded-2xl border border-border shadow-2xl max-w-md w-full p-6 space-y-4">
+            <div className="bg-background rounded-2xl border border-border shadow-lg max-w-md w-full p-6 space-y-4">
               <div className="flex items-center justify-between">
                 <h3 className="text-xl font-bold text-foreground">
                   Contact {data?.memberNick}

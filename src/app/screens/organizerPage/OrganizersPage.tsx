@@ -1,18 +1,7 @@
+import { PageHeader } from "@/libs/components/common/Headers";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import {
-  ArrowDownUp,
-  Eye,
-  Heart,
-  Mail,
-  Search,
-  User,
-  Users,
-  Calendar,
-  X,
-  BadgeCheck,
-  Clock,
-} from "lucide-react";
+import { ArrowDownUp, Heart, Search, X, BadgeCheck, ArrowUpRight } from "lucide-react";
 
 import { useGetOrganizersQuery } from "../../services/organizersApi";
 import {
@@ -189,16 +178,13 @@ export default function OrganizersPage() {
 
   return (
     <div>
-      <div className="mb-8 text-center">
-        <h1 className="m-0 text-3xl font-extrabold tracking-tight text-foreground">
-          Organizers
-        </h1>
-        <div className="mt-2 text-sm text-muted-foreground">
-          Browse through our list of event organizers
-        </div>
-      </div>
+      <PageHeader
+        eyebrow="Verified organizers"
+        title="The teams behind the events."
+        lead="Food banks, shelters, libraries and clean-up crews. Every organizer is reviewed before their first event goes live."
+      />
 
-      <div className="mb-8 rounded-[var(--radius-lg)] border border-border bg-card/30 p-4 shadow-sm">
+      <div className="mb-10 rounded-2xl bg-muted p-3 md:p-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="relative min-w-[280px] flex-1">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -209,7 +195,7 @@ export default function OrganizersPage() {
                 setPage(1);
               }}
               placeholder="Search by name, description..."
-              className="h-11 w-full rounded-[var(--radius-lg)] border border-border bg-background/40 pl-10 pr-3 text-foreground outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
+              className="h-11 w-full rounded-2xl border border-border bg-background pl-10 pr-3 text-foreground outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
             />
           </div>
 
@@ -221,7 +207,7 @@ export default function OrganizersPage() {
                   setOrder(e.target.value);
                   setPage(1);
                 }}
-                className="h-11 w-[170px] appearance-none rounded-[var(--radius-lg)] border border-border bg-background/40 px-3 pr-9 text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="h-11 w-[170px] appearance-none rounded-2xl border border-border bg-background px-3 pr-9 text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 aria-label="Sort by"
               >
                 {ORDER_OPTIONS.map((opt) => (
@@ -237,7 +223,7 @@ export default function OrganizersPage() {
 
             <button
               type="button"
-              className="inline-flex h-11 w-12 items-center justify-center rounded-[var(--radius-lg)] border border-border bg-background/40 text-foreground hover:bg-background/60"
+              className="inline-flex h-11 w-12 items-center justify-center rounded-2xl border border-border bg-background text-foreground hover:bg-background"
               onClick={() => {
                 setDirection((d) => (d === "asc" ? "desc" : "asc"));
                 setPage(1);
@@ -250,7 +236,7 @@ export default function OrganizersPage() {
 
             <button
               type="button"
-              className="inline-flex h-11 items-center gap-2 rounded-[var(--radius-lg)] border border-border bg-background/40 px-4 font-semibold text-foreground hover:bg-background/60"
+              className="inline-flex h-11 items-center gap-2 rounded-2xl border border-border bg-background px-4 font-semibold text-foreground hover:bg-background"
               onClick={() => {
                 setSearch("");
                 setOrder("createdAt");
@@ -290,124 +276,70 @@ export default function OrganizersPage() {
               return (
                 <div
                   key={org._id}
-                  className="flex h-full flex-col overflow-hidden rounded-[var(--radius-lg)] border border-border bg-card/30 shadow-sm"
+                  className="group flex h-full flex-col rounded-2xl bg-card p-6 ring-1 ring-border transition-shadow hover:shadow-lg"
                 >
-                  <div className="p-5">
-                    <div className="flex items-start gap-4">
-                      <div className="relative h-14 w-14 overflow-hidden rounded-full border border-border bg-muted">
+                  <div className="flex items-start justify-between gap-4">
+                    <Link to={`/organizers/${org._id}`} className="flex items-center gap-4">
+                      {avatar ? (
                         <img
-                          src={avatar || ""}
+                          src={avatar}
                           alt={org.memberNick}
-                          className="h-full w-full object-cover"
                           loading="lazy"
+                          className="h-14 w-14 rounded-full bg-muted object-cover ring-1 ring-border"
                         />
-                      </div>
-
-                      <div className="min-w-0 flex-1">
-                        <div className="truncate text-base font-extrabold text-foreground">
-                          {org.memberNick}
-                        </div>
-
-                        <div className="mt-1 flex items-center gap-2 text-xs font-semibold text-muted-foreground">
-                          <User className="h-3.5 w-3.5" />
-                          <span>Organizer</span>
-                          {org.isVerified ? (
-                            <span className="inline-flex items-center gap-0.5 rounded-full bg-primary/15 px-1.5 py-0 text-[10px] font-semibold text-primary">
-                              <BadgeCheck className="h-2.5 w-2.5" />
-                              Verified
-                            </span>
-                          ) : org.memberStatus === "PENDING" ? (
-                            <span className="inline-flex items-center gap-0.5 rounded-full bg-yellow-100 px-1.5 py-0 text-[10px] font-semibold text-yellow-700">
-                              <Clock className="h-2.5 w-2.5" />
-                              Pending
-                            </span>
-                          ) : null}
-                        </div>
-
-                        <div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
-                          <Mail className="h-3.5 w-3.5" />
-                          <span className="truncate">
-                            {org.memberPhone || ""}
+                      ) : (
+                        <span className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-sage text-lg font-bold text-olive">
+                          {initial}
+                        </span>
+                      )}
+                      <div>
+                        <div className="text-lg font-bold leading-snug tracking-tight text-foreground">{org.memberNick}</div>
+                        {org.isVerified && (
+                          <span className="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-olive dark:text-lime">
+                            <BadgeCheck className="h-4 w-4" /> Verified organizer
                           </span>
-                        </div>
+                        )}
                       </div>
-                    </div>
-
-                    <div className="mt-5 grid grid-cols-3 gap-2 rounded-[var(--radius-lg)] border border-border bg-background/20 p-2 text-xs text-muted-foreground">
-                      <div className="flex items-center justify-center gap-2 rounded-[var(--radius-lg)] bg-background/20 px-2 py-2">
-                        <Calendar className="h-4 w-4 text-primary" />
-                        <span className="font-semibold text-foreground">
-                          {org.eventsOrganizedCount ?? 0}
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-center gap-2 rounded-[var(--radius-lg)] bg-background/20 px-2 py-2">
-                        <Users className="h-4 w-4 text-primary" />
-                        <span className="font-semibold text-foreground">
-                          {org.groupsOrganizedCount ?? 0}
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-center gap-2 rounded-[var(--radius-lg)] bg-background/20 px-2 py-2">
-                        <Heart className="h-4 w-4 text-primary" />
-                        <span className="font-semibold text-foreground">
-                          {memberLikes}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="mt-4 rounded-[var(--radius-lg)] border border-border bg-background/20 px-4 py-3">
-                      <div className="truncate text-center text-xs text-muted-foreground">
-                        {org.memberDesc?.trim()
-                          ? org.memberDesc.trim()
-                          : "No description available"}
-                      </div>
-                    </div>
+                    </Link>
+                    <button
+                      type="button"
+                      className="inline-flex h-9 items-center gap-1.5 rounded-full px-3 text-sm font-semibold ring-1 ring-border transition-colors hover:bg-muted disabled:opacity-60"
+                      aria-label={likedByMe ? "Unlike" : "Like"}
+                      aria-pressed={likedByMe}
+                      disabled={isLikePending}
+                      onClick={async () => {
+                        await handleToggleLike(org._id, likedByMe, memberLikes);
+                      }}
+                    >
+                      <Heart className={`h-4 w-4 ${likedByMe ? "fill-rose-500 text-rose-500" : "text-muted-foreground"}`} />
+                      {memberLikes}
+                    </button>
                   </div>
 
-                  <div className="mt-auto border-t border-border bg-background/10 p-4">
-                    <div className="flex items-center justify-between">
-                      <button
-                        type="button"
-                        className="inline-flex items-center gap-2 rounded-full border border-border bg-background/30 px-4 py-2 text-foreground disabled:cursor-not-allowed disabled:opacity-60"
-                        aria-label={likedByMe ? "Unlike" : "Like"}
-                        aria-pressed={likedByMe}
-                        disabled={isLikePending}
-                        onClick={async () => {
-                          await handleToggleLike(
-                            org._id,
-                            likedByMe,
-                            memberLikes,
-                          );
-                        }}
-                      >
-                        <Heart
-                          className="h-4 w-4 text-destructive"
-                          fill={likedByMe ? "currentColor" : "none"}
-                        />
-                        <span className="text-sm font-semibold">
-                          {memberLikes}
-                        </span>
-                      </button>
+                  <p className="mt-5 line-clamp-2 text-[15px] leading-6 text-muted-foreground">
+                    {org.memberDesc?.trim() ? org.memberDesc.trim() : "Verified organizer on Unity."}
+                  </p>
 
-                      <Link
-                        to={`/organizers/${org._id}`}
-                        className="inline-flex items-center justify-center rounded-[var(--radius-lg)] bg-primary px-6 py-2 text-sm font-bold text-primary-foreground"
-                        aria-label="View organizer detail"
-                      >
-                        View
-                      </Link>
-
-                      <div
-                        className="inline-flex items-center gap-2 rounded-full border border-border bg-background/30 px-4 py-2 text-foreground"
-                        aria-label="Views"
-                        title="Views"
-                      >
-                        <Eye className="h-4 w-4 text-primary" />
-                        <span className="text-sm font-semibold">
-                          {org.memberViews ?? 0}
-                        </span>
+                  <div className="mt-6 grid grid-cols-3 gap-2">
+                    {[
+                      { label: "Events", value: org.eventsOrganizedCount ?? 0 },
+                      { label: "Groups", value: org.groupsOrganizedCount ?? 0 },
+                      { label: "Views", value: org.memberViews ?? 0 },
+                    ].map((stat) => (
+                      <div key={stat.label} className="rounded-xl bg-muted px-3 py-2.5">
+                        <div className="text-lg font-extrabold tracking-tight text-foreground">{stat.value}</div>
+                        <div className="font-mono text-[10px] uppercase tracking-[0.08em] text-muted-foreground">{stat.label}</div>
                       </div>
-                    </div>
+                    ))}
                   </div>
+
+                  <Link
+                    to={`/organizers/${org._id}`}
+                    className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-foreground"
+                    aria-label={`View ${org.memberNick}`}
+                  >
+                    View organizer <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                  </Link>
                 </div>
               );
             })}
@@ -416,20 +348,20 @@ export default function OrganizersPage() {
           <div className="mt-10 flex items-center justify-center gap-4 text-sm text-muted-foreground">
             <button
               type="button"
-              className="inline-flex items-center gap-2 rounded-[var(--radius-lg)] px-3 py-2 hover:text-foreground"
+              className="inline-flex items-center gap-2 rounded-2xl px-3 py-2 hover:text-foreground"
               disabled={page <= 1}
               onClick={() => setPage((p) => Math.max(1, p - 1))}
             >
               ‹ Previous
             </button>
 
-            <div className="flex h-10 w-10 items-center justify-center rounded-[var(--radius-lg)] border border-border bg-background/20 text-foreground">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-border bg-background/20 text-foreground">
               {page}
             </div>
 
             <button
               type="button"
-              className="inline-flex items-center gap-2 rounded-[var(--radius-lg)] px-3 py-2 hover:text-foreground"
+              className="inline-flex items-center gap-2 rounded-2xl px-3 py-2 hover:text-foreground"
               disabled={!data || data.length < 9}
               onClick={() => setPage((p) => p + 1)}
             >

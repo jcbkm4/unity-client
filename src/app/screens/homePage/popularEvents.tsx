@@ -1,67 +1,53 @@
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
-import { Heart } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
-import { useGetWeeklyPopularEventsQuery } from "../../services/eventsApi";
+import { useGetEventsQuery, useGetWeeklyPopularEventsQuery } from "../../services/eventsApi";
 import { useCheckLikesBatchQuery } from "../../services/likesApi";
 import EventCard from "../eventsPage/EventCard";
+import { SectionHeader } from "@/libs/components/common/Headers";
 
 export default function PopularEventsSection() {
-  const { data, isLoading, isError } = useGetWeeklyPopularEventsQuery({
-    days: 7,
-    limit: 4,
-  });
+  const weekly = useGetWeeklyPopularEventsQuery({ days: 7, limit: 4 });
+  // Quiet week? Fall back to the most-liked events so the section is never empty.
+  const favourites = useGetEventsQuery(
+    { page: 1, limit: 4, order: "eventLikes", direction: "desc" },
+    { skip: weekly.isLoading || Boolean(weekly.data?.length) },
+  );
+  const data = weekly.data?.length ? weekly.data : favourites.data?.items;
+  const isLoading = weekly.isLoading || favourites.isLoading;
+  const isError = weekly.isError && favourites.isError;
 
   const eventIds = useMemo(() => data?.map((e) => e._id) ?? [], [data]);
   const { data: likesData } = useCheckLikesBatchQuery(
     { likeGroup: "EVENT", likeRefIds: eventIds },
     { skip: eventIds.length === 0 },
   );
-
-  const likedSet = useMemo(() => {
-    const ids = likesData?.likedRefIds ?? [];
-    return new Set(ids);
-  }, [likesData]);
+  const likedSet = useMemo(() => new Set(likesData?.likedRefIds ?? []), [likesData]);
 
   return (
-    <section className="mb-7">
-      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <div className="flex items-center gap-2">
-            <Heart className="h-5 w-5 text-primary" />
-            <h2 className="m-0 text-[22px] font-extrabold tracking-tight text-foreground">
-              Popular events
-            </h2>
-          </div>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Top events this week by volunteer applications.
-          </p>
-        </div>
-
-        <Link
-          to="/events"
-          className="inline-flex items-center justify-center rounded-[var(--radius-lg)] border border-border bg-background/40 px-4 py-2 text-sm font-semibold text-foreground hover:bg-background/60"
-        >
-          See all
-          <span className="ml-2 text-primary" aria-hidden="true">
-            →
-          </span>
-        </Link>
-      </div>
-
-      <div className="rounded-[var(--radius-lg)] border border-border bg-card/30 p-4 shadow-sm">
+    <section className="section-y surface-mist">
+      <div className="content-container">
+        <SectionHeader
+          eyebrow="Popular this week"
+          title="Events volunteers are joining now."
+          lead="The most-applied events of the last seven days."
+          action={
+            <Link to="/events" className="btn-pill btn-pill-outline">
+              All events <ArrowRight className="h-4 w-4" />
+            </Link>
+          }
+        />
         {isLoading ? (
-          <div className="text-muted-foreground">Loading…</div>
+          <div className="text-muted-foreground">Loading events…</div>
         ) : isError ? (
-          <div className="text-destructive">Failed to load events.</div>
+          <div className="text-destructive">Events could not be loaded.</div>
         ) : !data?.length ? (
-          <div className="text-muted-foreground">No events yet.</div>
+          <div className="rounded-2xl bg-background p-8 text-muted-foreground">No events yet.</div>
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
             {data.map((event) => (
-              <div key={event._id} className="h-full">
-                <EventCard event={event} likedByMe={likedSet.has(event._id)} />
-              </div>
+              <EventCard key={event._id} event={event} likedByMe={likedSet.has(event._id)} />
             ))}
           </div>
         )}

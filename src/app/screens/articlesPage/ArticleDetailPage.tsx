@@ -232,7 +232,7 @@ export default function ArticleDetailPage() {
         ← Back to Articles
       </Link>
 
-      <div className="rounded-[var(--radius-lg)] border border-border bg-card/30 overflow-hidden">
+      <div className="rounded-2xl border border-border bg-card overflow-hidden">
         <div className="relative w-full aspect-[16/7] bg-muted">
           {cover ? (
             <img
@@ -256,7 +256,7 @@ export default function ArticleDetailPage() {
                 {formatDate(data.createdAt)}
               </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
+            <h1 className="display-lg text-foreground">
               {data.boardTitle}
             </h1>
           </div>

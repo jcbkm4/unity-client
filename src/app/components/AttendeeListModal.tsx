@@ -144,7 +144,7 @@ const AttendeeListModal: React.FC<AttendeeListModalProps> = ({
         return (
           <Badge
             variant="outline"
-            className="bg-purple-50 text-purple-700 border-purple-300"
+            className="bg-sage text-olive border-olive/30"
           >
             <CheckCircle className="w-3 h-3 mr-1" />
             Completed
@@ -163,7 +163,7 @@ const AttendeeListModal: React.FC<AttendeeListModalProps> = ({
     if (isLoading) {
       return (
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600" />
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-olive" />
         </div>
       );
     }
@@ -183,10 +183,10 @@ const AttendeeListModal: React.FC<AttendeeListModalProps> = ({
           {attendeesList.map((attendee) => (
             <div
               key={attendee._id}
-              className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:border-purple-300 transition-colors"
+              className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:border-olive/30 transition-colors"
             >
               <div className="flex items-center gap-3 flex-1">
-                <Avatar className="w-12 h-12 border-2 border-purple-100">
+                <Avatar className="w-12 h-12 border-2 border-olive/20">
                   <AvatarImage
                     src={getMemberImageUrl(
                       attendee.memberData.memberImage,
@@ -194,7 +194,7 @@ const AttendeeListModal: React.FC<AttendeeListModalProps> = ({
                     )}
                     alt={attendee.memberData.memberNick}
                   />
-                  <AvatarFallback className="bg-gradient-to-br from-purple-500 to-blue-500 text-white font-semibold">
+                  <AvatarFallback className="bg-gradient-to-br from-olive to-forest text-white font-semibold">
                     {attendee.memberData.memberNick.charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
@@ -205,7 +205,7 @@ const AttendeeListModal: React.FC<AttendeeListModalProps> = ({
                       {attendee.memberData.memberNick}
                     </h4>
                     {attendee.memberData.isVerified && (
-                      <Badge className="bg-blue-100 text-blue-700 text-xs border-0">
+                      <Badge className="bg-blue-100 text-olive text-xs border-0">
                         Verified
                       </Badge>
                     )}
@@ -263,7 +263,7 @@ const AttendeeListModal: React.FC<AttendeeListModalProps> = ({
                   <Button
                     size="sm"
                     variant="outline"
-                    className="text-purple-700 border-purple-300 hover:bg-purple-50"
+                    className="text-olive border-olive/30 hover:bg-sage"
                     onClick={() =>
                       handleComplete(
                         attendee._id,

@@ -1,188 +1,68 @@
 import { Link } from "react-router-dom";
-import {
-  BadgeCheck,
-  Building2,
-  CalendarCheck,
-  Clock,
-  Eye,
-  Heart,
-  MessageCircle,
-  Newspaper,
-} from "lucide-react";
+import { ArrowRight, ArrowUpRight, BadgeCheck, CalendarDays, Eye } from "lucide-react";
 
 import { useGetTopOrganizersQuery } from "../../services/organizersApi";
 import { memberImageUrlFromFilename } from "../../../libs/shared/ui";
-
-function formatCompactNumber(value?: number): string {
-  const num = typeof value === "number" ? value : 0;
-  return new Intl.NumberFormat(undefined, { notation: "compact" }).format(num);
-}
+import { SectionHeader } from "@/libs/components/common/Headers";
 
 export default function TopOrganizersSection() {
   const { data, isLoading, isError } = useGetTopOrganizersQuery({ limit: 4 });
 
   return (
-    <section className="mb-7">
-      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <div className="flex items-center gap-2">
-            <Building2 className="h-5 w-5 text-primary" />
-            <h2 className="m-0 text-[22px] font-extrabold tracking-tight text-foreground">
-              Top organizers
-            </h2>
-          </div>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Ranked by community signals: likes, views, events, articles, and
-            article comments.
-          </p>
-        </div>
+    <section className="section-y surface-sage">
+      <div className="content-container">
+        <SectionHeader
+          eyebrow="Verified organizers"
+          title="The teams behind the events."
+          lead="Every organizer on Unity is reviewed before their first event goes live."
+          action={
+            <Link to="/organizers" className="btn-pill btn-pill-outline">
+              All organizers <ArrowRight className="h-4 w-4" />
+            </Link>
+          }
+        />
 
-        <Link
-          to="/organizers"
-          className="inline-flex items-center justify-center rounded-[var(--radius-lg)] border border-border bg-background/40 px-4 py-2 text-sm font-semibold text-foreground hover:bg-background/60"
-        >
-          See all
-          <span className="ml-2 text-primary" aria-hidden="true">
-            →
-          </span>
-        </Link>
-      </div>
-
-      <div className="rounded-[var(--radius-lg)] border border-border bg-card/30 p-4 shadow-sm">
         {isLoading ? (
-          <div className="text-muted-foreground">Loading…</div>
+          <div className="text-muted-foreground">Loading organizers…</div>
         ) : isError ? (
-          <div className="text-destructive">Failed to load organizers.</div>
+          <div className="text-destructive">Organizers could not be loaded.</div>
         ) : !data?.length ? (
-          <div className="text-muted-foreground">No organizers yet.</div>
+          <div className="rounded-2xl bg-background p-8 text-muted-foreground">No organizers yet.</div>
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {data.map((org) => {
-              const avatarImg = memberImageUrlFromFilename(
-                org.memberImage,
-                org.memberNick,
-              );
-              const initial = (org.memberNick || "?").slice(0, 1).toUpperCase();
-
+              const avatar = memberImageUrlFromFilename(org.memberImage, org.memberNick);
+              const events = org.eventsOrganizedCount ?? org.eventsCount ?? 0;
               return (
                 <Link
                   key={org._id}
                   to={`/organizers/${org._id}`}
-                  className="group block h-full"
+                  className="group flex h-full flex-col rounded-2xl bg-background p-6 ring-1 ring-border transition-shadow hover:shadow-lg"
                 >
-                  <div className="flex h-full flex-col rounded-xl border border-border bg-background/30 p-3 transition-colors hover:bg-background/40">
-                    <div className="flex items-start gap-3">
-                      <div className="relative h-12 w-12 overflow-hidden rounded-full border border-border bg-muted flex-shrink-0">
-                        <img
-                          src={avatarImg || ""}
-                          alt={org.memberNick}
-                          className="h-full w-full object-cover"
-                          loading="lazy"
-                        />
-                      </div>
-
-                      <div className="min-w-0 flex-1">
-                        <div className="text-sm font-extrabold tracking-tight leading-snug text-foreground break-words">
-                          {org.memberNick}
-                        </div>
-
-                        <div className="mt-0.5 flex flex-wrap items-center gap-1 text-xs font-semibold text-muted-foreground">
-                          <span>Organizer</span>
-                          {org.isVerified ? (
-                            <span className="inline-flex items-center gap-0.5 rounded-full bg-primary/15 px-1.5 py-0 text-[10px] font-semibold text-primary">
-                              <BadgeCheck className="h-2.5 w-2.5" />
-                              Verified
-                            </span>
-                          ) : org.memberStatus === "PENDING" ? (
-                            <span className="inline-flex items-center gap-0.5 rounded-full bg-yellow-100 px-1.5 py-0 text-[10px] font-semibold text-yellow-700">
-                              <Clock className="h-2.5 w-2.5" />
-                              Pending
-                            </span>
-                          ) : null}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="mt-2 grid grid-cols-2 gap-2">
-                      <div className="rounded-[var(--radius-lg)] border border-border bg-background/20 p-2">
-                        <div className="flex items-center gap-1 text-xs font-semibold text-muted-foreground">
-                          <Heart className="h-3.5 w-3.5 text-primary" />
-                          <span>Likes</span>
-                        </div>
-                        <div className="mt-1 text-lg font-extrabold text-foreground">
-                          {formatCompactNumber(org.memberLikes)}
-                        </div>
-                      </div>
-                      <div className="rounded-[var(--radius-lg)] border border-border bg-background/20 p-2">
-                        <div className="flex items-center gap-1 text-xs font-semibold text-muted-foreground">
-                          <Eye className="h-3.5 w-3.5 text-primary" />
-                          <span>Views</span>
-                        </div>
-                        <div className="mt-1 text-lg font-extrabold text-foreground">
-                          {formatCompactNumber(org.memberViews)}
-                        </div>
-                      </div>
-                      <div className="rounded-[var(--radius-lg)] border border-border bg-background/20 p-2">
-                        <div className="flex items-center gap-1 text-xs font-semibold text-muted-foreground">
-                          <CalendarCheck className="h-3.5 w-3.5 text-primary" />
-                          <span>Events</span>
-                        </div>
-                        <div className="mt-1 text-lg font-extrabold text-foreground">
-                          {formatCompactNumber(org.eventsCount)}
-                        </div>
-                      </div>
-                      <div className="rounded-[var(--radius-lg)] border border-border bg-background/20 p-2">
-                        <div className="flex items-center gap-1 text-xs font-semibold text-muted-foreground">
-                          <Heart className="h-3.5 w-3.5 text-primary" />
-                          <span>Event likes</span>
-                        </div>
-                        <div className="mt-1 text-lg font-extrabold text-foreground">
-                          {formatCompactNumber(org.eventsLikesTotal)}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="mt-2 rounded-[var(--radius-lg)] border border-border bg-background/20 p-2">
-                      <div className="flex items-center gap-1 text-xs font-semibold text-muted-foreground">
-                        <Eye className="h-3.5 w-3.5 text-primary" />
-                        <span>Event views</span>
-                      </div>
-                      <div className="mt-1 text-lg font-extrabold text-foreground">
-                        {formatCompactNumber(org.eventsViewsTotal)}
-                      </div>
-                    </div>
-
-                    <div className="mt-2 flex items-center justify-between gap-1 rounded-[var(--radius-lg)] border border-border bg-background/20 px-2 py-1.5 text-xs font-semibold text-muted-foreground">
-                      <div className="flex items-center gap-1">
-                        <Newspaper className="h-3.5 w-3.5 text-primary" />
-                        <span>Articles</span>
-                        <span className="text-foreground">
-                          {formatCompactNumber(org.articlesCount)}
-                        </span>
-                      </div>
-                      <div className="h-3 w-px bg-border" />
-                      <div className="flex items-center gap-1">
-                        <MessageCircle className="h-3.5 w-3.5 text-primary" />
-                        <span>Comments</span>
-                        <span className="text-foreground">
-                          {formatCompactNumber(org.articleCommentsCount)}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="mt-auto pt-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-extrabold tracking-tight text-muted-foreground">
-                          View profile
-                        </span>
-                        <span
-                          className="text-primary transition-transform group-hover:translate-x-0.5"
-                          aria-hidden="true"
-                        >
-                          →
-                        </span>
-                      </div>
-                    </div>
+                  <div className="flex items-start justify-between">
+                    <img
+                      src={avatar}
+                      alt={org.memberNick}
+                      className="h-14 w-14 rounded-full bg-muted object-cover ring-1 ring-border"
+                    />
+                    <ArrowUpRight className="h-5 w-5 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-foreground" />
+                  </div>
+                  <div className="mt-6 text-lg font-bold tracking-tight text-foreground">{org.memberNick}</div>
+                  {org.isVerified && (
+                    <span className="mt-2 inline-flex w-fit items-center gap-1 text-xs font-semibold text-olive dark:text-lime">
+                      <BadgeCheck className="h-4 w-4" /> Verified organizer
+                    </span>
+                  )}
+                  {org.memberDesc && (
+                    <p className="mt-3 line-clamp-2 text-sm leading-6 text-muted-foreground">{org.memberDesc}</p>
+                  )}
+                  <div className="mt-auto flex items-center gap-4 border-t border-border pt-4 text-sm text-muted-foreground">
+                    <span className="inline-flex items-center gap-1.5">
+                      <CalendarDays className="h-4 w-4" /> {events} events
+                    </span>
+                    <span className="inline-flex items-center gap-1.5">
+                      <Eye className="h-4 w-4" /> {org.eventsViewsTotal ?? 0}
+                    </span>
                   </div>
                 </Link>
               );

@@ -1,5 +1,5 @@
-import { Link, NavLink } from "react-router-dom";
-import { useMemo, useState } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 import {
   Menu,
   X,
@@ -9,6 +9,7 @@ import {
   HelpCircle,
   Users,
   Building2,
+  ArrowUpRight,
 } from "lucide-react";
 
 import { Button, buttonVariants } from "@/libs/components/ui/button";
@@ -47,264 +48,198 @@ export default function Header() {
   const { data: authData } = useCheckAuthQuery();
   const isAuthed = Boolean(authData?.member?._id);
   const displayName = authData?.member?.memberNick || "Guest";
-  const displayPhone = authData?.member?.memberPhone || "+000 00 000 00 00";
+  const memberType = authData?.member?.memberType;
   const initial = displayName.charAt(0).toUpperCase();
-  const avatarSrcRaw = authData?.member?.memberImage;
+  const avatar = memberImageUrlFromFilename(authData?.member?.memberImage, displayName);
   const [logout] = useLogoutMutation();
 
-  const avatar = memberImageUrlFromFilename(avatarSrcRaw, displayName);
-
+  const { pathname } = useLocation();
+  const isHome = pathname === "/";
+  const [scrolled, setScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const linkClassName = useMemo(
-    () =>
-      ({ isActive }: { isActive: boolean }) =>
-        cn(
-          "text-sm font-medium transition-colors duration-300",
-          isActive
-            ? "text-primary font-semibold underline underline-offset-6"
-            : "text-muted-foreground hover:text-primary",
-        ),
-    [],
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [pathname]);
+
+  // On the home page the bar floats over the full-bleed hero photo until you scroll.
+  const overlay = isHome && !scrolled;
+
+  const doLogout = async () => {
+    try {
+      await logout().unwrap();
+    } finally {
+      window.location.assign("/login");
+    }
+  };
+
+  const avatarButton = (
+    <Button
+      variant="ghost"
+      size="icon"
+      className={cn(
+        "h-10 w-10 rounded-full p-0.5 border",
+        overlay ? "border-white/40 hover:bg-white/10" : "border-border hover:bg-accent",
+      )}
+      aria-label="Open profile menu"
+    >
+      {avatar ? (
+        <img src={avatar} alt={displayName} className="h-full w-full rounded-full object-cover" />
+      ) : (
+        <span className="inline-flex h-full w-full items-center justify-center rounded-full text-sm font-bold">
+          {initial}
+        </span>
+      )}
+    </Button>
+  );
+
+  const profileMenu = (
+    <DropdownMenuContent align="end" className="w-64 rounded-2xl border bg-popover p-0 shadow-xl">
+      <div className="px-4 py-3.5">
+        <div className="eyebrow">{memberType === "ORG" ? "Organizer" : "Volunteer"}</div>
+        <div className="mt-1 truncate text-[15px] font-bold text-foreground">{displayName}</div>
+      </div>
+      {memberType === "USER" && (
+        <>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem asChild>
+            <Link to="/profile" className="w-full px-4 py-2.5">My profile</Link>
+          </DropdownMenuItem>
+        </>
+      )}
+      {memberType === "ORG" && (
+        <>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem asChild>
+            <Link to="/dashboard" className="w-full px-4 py-2.5">Organizer dashboard</Link>
+          </DropdownMenuItem>
+        </>
+      )}
+      <DropdownMenuSeparator />
+      <DropdownMenuItem asChild>
+        <Link to="/events?liked=true" className="w-full px-4 py-2.5">Saved events</Link>
+      </DropdownMenuItem>
+      <DropdownMenuSeparator />
+      <DropdownMenuItem onClick={doLogout} className="px-4 py-2.5">Log out</DropdownMenuItem>
+    </DropdownMenuContent>
   );
 
   return (
-    <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b w-full">
-      <div className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-20 flex items-center justify-between h-14 sm:h-16 md:h-20">
-        <Link
-          to="/"
-          className="flex items-center gap-2 sm:gap-3 hover:scale-95 transition-transform duration-300"
-        >
-          <Logo className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 text-primary" />
-          <span className="text-lg sm:text-xl font-semibold tracking-wide text-primary">
-            UNITY
+    <header
+      className={cn(
+        "z-50 w-full transition-colors duration-300",
+        isHome ? "fixed inset-x-0 top-0" : "sticky top-0",
+        overlay
+          ? "bg-transparent text-white"
+          : "bg-background/90 text-foreground backdrop-blur-md border-b border-border/70",
+      )}
+    >
+      <div className="mx-auto flex h-16 md:h-[72px] max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-12">
+        <Link to="/" className="flex items-center gap-2.5" aria-label="Unity home">
+          <span
+            className={cn(
+              "inline-flex h-9 w-9 items-center justify-center rounded-full",
+              overlay ? "bg-white/15 text-white" : "bg-sage text-olive dark:bg-accent dark:text-lime",
+            )}
+          >
+            <Logo className="h-5 w-5" />
           </span>
+          <span className="text-[1.3rem] font-extrabold tracking-[-0.03em]">Unity</span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-4 lg:gap-6 xl:gap-8">
+        <nav className="hidden md:flex items-center gap-1 lg:gap-2" aria-label="Main">
           {navLinks.map((link) => (
             <NavLink
               key={link.href}
               to={link.href}
-              className={linkClassName}
               end={link.href === "/"}
+              className={({ isActive }) =>
+                cn(
+                  "rounded-full px-3.5 py-2 text-[15px] font-medium transition-colors",
+                  overlay
+                    ? isActive
+                      ? "bg-white/15 text-white"
+                      : "text-white/85 hover:text-white hover:bg-white/10"
+                    : isActive
+                      ? "bg-accent text-accent-foreground font-semibold"
+                      : "text-foreground/75 hover:text-foreground hover:bg-muted",
+                )
+              }
             >
               {link.label}
             </NavLink>
           ))}
         </nav>
 
-        <div className="hidden md:flex items-center gap-2 lg:gap-3">
+        <div className="hidden md:flex items-center gap-2">
           <ModeToggle />
-
           {isAuthed ? (
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-9 w-9 rounded-full border border-border bg-card hover:bg-accent"
-                  aria-label="Open profile menu"
-                >
-                  {avatar ? (
-                    <img
-                      src={avatar}
-                      alt={displayName}
-                      className="h-full w-full rounded-full object-cover"
-                    />
-                  ) : (
-                    <span className="inline-flex h-full w-full items-center justify-center rounded-full text-sm font-bold">
-                      {initial}
-                    </span>
-                  )}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="end"
-                className="rounded-xl border bg-white dark:bg-popover p-0 w-60 shadow-xl"
-              >
-                {/* Identity section */}
-                <div className="px-4 py-3">
-                  <div className="text-sm font-extrabold text-foreground truncate">
-                    {displayName}
-                  </div>
-                  <div className="mt-0.5 text-xs text-muted-foreground truncate">
-                    {displayPhone}
-                  </div>
-                </div>
-
-
-                {/* Menu links */}
-                {authData?.member?.memberType === "USER" && (
-                  <>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild>
-                      <Link to="/profile" className="w-full">
-                        Profile
-                      </Link>
-                    </DropdownMenuItem>
-                  </>
-                )}
-
-                {authData?.member?.memberType === "ORG" && (
-                  <>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild>
-                      <Link to="/dashboard" className="w-full">
-                        Dashboard
-                      </Link>
-                    </DropdownMenuItem>
-                  </>
-                )}
-
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link to="/events?liked=true" className="w-full">
-                    My Liked Events
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onClick={async () => {
-                    try {
-                      await logout().unwrap();
-                    } finally {
-                      window.location.assign("/login");
-                    }
-                  }}
-                >
-                  Logout
-                </DropdownMenuItem>
-              </DropdownMenuContent>
+              <DropdownMenuTrigger asChild>{avatarButton}</DropdownMenuTrigger>
+              {profileMenu}
             </DropdownMenu>
           ) : (
-            <div className="flex items-center gap-2 lg:gap-4">
-              <Link to="/login">
-                <Button
-                  variant="outline"
-                  className="text-xs sm:text-sm h-8 lg:h-9 px-3 lg:px-4"
-                >
-                  Login
-                </Button>
+            <>
+              <Link
+                to="/login"
+                className={cn("btn-pill btn-pill-sm", overlay ? "btn-pill-ghost-light" : "btn-pill-outline")}
+              >
+                Log in
               </Link>
-              <Link to="/signup">
-                <Button className="text-xs sm:text-sm h-8 lg:h-9 px-3 lg:px-4">
-                  Sign up
-                </Button>
+              <Link
+                to="/signup"
+                className={cn("btn-pill btn-pill-sm", overlay && "btn-pill-light")}
+              >
+                Sign up <ArrowUpRight className="h-4 w-4" />
               </Link>
-            </div>
+            </>
           )}
         </div>
 
         <div className="flex md:hidden items-center gap-2">
           {!isAuthed && (
-            <Link to="/login">
-              <Button variant="outline" className="text-xs sm:text-sm h-8 px-3">
-                Login
-              </Button>
+            <Link
+              to="/login"
+              className={cn("btn-pill btn-pill-sm", overlay ? "btn-pill-ghost-light" : "btn-pill-outline")}
+            >
+              Log in
             </Link>
           )}
 
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-9 w-9">
+              <Button
+                variant="ghost"
+                size="icon"
+                className={cn("h-10 w-10", overlay && "text-white hover:bg-white/10")}
+              >
                 <Menu className="h-5 w-5" />
                 <span className="sr-only">Open menu</span>
               </Button>
             </SheetTrigger>
 
-            <SheetContent
-              side="right"
-              className="min-w-[330px] w-[300px] sm:w-[350px]"
-            >
+            <SheetContent side="right" className="w-[320px] sm:w-[360px]">
               <div className="flex h-full flex-col">
                 <SheetHeader className="gap-0 border-b p-0">
-                  <div className="flex items-center justify-between px-4 pt-4 pb-3">
-                    <div className="w-10" />
-                    <SheetTitle className="text-base">Menu</SheetTitle>
+                  <div className="flex items-center justify-between px-5 pt-5 pb-4">
+                    <SheetTitle className="text-lg font-extrabold tracking-tight">Unity</SheetTitle>
                     <SheetClose asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-10 w-10 opacity-80 hover:opacity-100"
-                        aria-label="Close menu"
-                      >
+                      <Button variant="ghost" size="icon" className="h-10 w-10" aria-label="Close menu">
                         <X className="h-5 w-5" />
                       </Button>
                     </SheetClose>
                   </div>
-
-                  <div className="px-4 pb-4">
-                    <div className="flex items-center justify-between">
-                      <ModeToggle />
-                      {isAuthed && (
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-9 w-9 rounded-full border border-border bg-card hover:bg-accent"
-                              aria-label="Open profile menu"
-                            >
-                              {avatar ? (
-                                <img
-                                  src={avatar}
-                                  alt={displayName}
-                                  className="h-full w-full rounded-full object-cover"
-                                />
-                              ) : (
-                                <span className="inline-flex h-full w-full items-center justify-center rounded-full text-sm font-bold">
-                                  {initial}
-                                </span>
-                              )}
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent
-                            align="end"
-                            className="rounded-xl border bg-white dark:bg-popover p-0 w-60 shadow-xl"
-                          >
-                            <div className="px-4 py-3">
-                              <div className="text-sm font-extrabold text-foreground truncate">
-                                {displayName}
-                              </div>
-                              <div className="mt-0.5 text-xs text-muted-foreground truncate">
-                                {displayPhone}
-                              </div>
-                            </div>
-                            <DropdownMenuSeparator />
-                            {authData?.member?.memberType === "USER" && (
-                              <DropdownMenuItem asChild>
-                                <Link to="/profile" className="w-full">
-                                  Profile
-                                </Link>
-                              </DropdownMenuItem>
-                            )}
-                            {authData?.member?.memberType === "ORG" && (
-                              <>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem asChild>
-                                  <Link to="/dashboard" className="w-full">
-                                    Dashboard
-                                  </Link>
-                                </DropdownMenuItem>
-                              </>
-                            )}
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                              onClick={async () => {
-                                try {
-                                  await logout().unwrap();
-                                } finally {
-                                  window.location.assign("/login");
-                                }
-                              }}
-                            >
-                              Logout
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      )}
-                    </div>
+                  <div className="flex items-center justify-between px-5 pb-4">
+                    <ModeToggle />
+                    {isAuthed && (
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>{avatarButton}</DropdownMenuTrigger>
+                        {profileMenu}
+                      </DropdownMenu>
+                    )}
                   </div>
                 </SheetHeader>
 
@@ -314,15 +249,13 @@ export default function Header() {
                       <SheetClose asChild key={link.href}>
                         <NavLink
                           to={link.href}
+                          end={link.href === "/"}
                           className={({ isActive }) =>
                             cn(
-                              buttonVariants({
-                                variant: isActive ? "secondary" : "ghost",
-                              }),
-                              "w-full justify-start gap-2 h-11 text-base font-medium flex flex-row items-center",
+                              buttonVariants({ variant: isActive ? "secondary" : "ghost" }),
+                              "w-full justify-start gap-3 h-12 text-base font-medium",
                             )
                           }
-                          end={link.href === "/"}
                         >
                           <link.icon className="h-5 w-5 flex-shrink-0" />
                           <span>{link.label}</span>
@@ -330,6 +263,11 @@ export default function Header() {
                       </SheetClose>
                     ))}
                   </div>
+                  {!isAuthed && (
+                    <Link to="/signup" className="btn-pill mt-6 w-full">
+                      Create a free account
+                    </Link>
+                  )}
                 </div>
               </div>
             </SheetContent>

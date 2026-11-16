@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
+
 import { useLoginMutation } from "../../services/authApi";
 import { useScrollToTop } from "../../hooks/useScrollToTop";
+import AuthShell, { fieldInput, fieldLabel } from "./AuthShell";
 
 function errorMessage(err: unknown): string {
   if (!err || typeof err !== "object") return "Login failed.";
@@ -13,123 +16,70 @@ export default function LoginPage() {
   useScrollToTop();
   const navigate = useNavigate();
   const [login, { isLoading }] = useLoginMutation();
-
   const [memberNick, setMemberNick] = useState("");
   const [memberPassword, setMemberPassword] = useState("");
   const [formError, setFormError] = useState<string | null>(null);
 
   return (
-    <div style={{ maxWidth: 520, margin: "0 auto" }}>
-      <h1 style={{ marginTop: 0, fontSize: 28 }}>Login</h1>
-      <div style={{ marginTop: 6, color: "var(--text-muted)" }}>
-        Login to apply as a volunteer or create events as an organization.
-      </div>
+    <AuthShell
+      eyebrow="Welcome back"
+      title="Log in to Unity."
+      lead="Apply to events as a volunteer, or manage your events as an organization."
+    >
+      <form
+        className="space-y-5"
+        onSubmit={async (e) => {
+          e.preventDefault();
+          setFormError(null);
+          try {
+            await login({ memberNick: memberNick.trim(), memberPassword }).unwrap();
+            navigate("/", { replace: true });
+          } catch (err) {
+            setFormError(errorMessage(err));
+          }
+        }}
+      >
+        <div>
+          <label htmlFor="login-nick" className={fieldLabel}>Username</label>
+          <input
+            id="login-nick"
+            autoComplete="username"
+            value={memberNick}
+            onChange={(e) => setMemberNick(e.target.value)}
+            className={fieldInput}
+            placeholder="Your username"
+          />
+        </div>
+        <div>
+          <label htmlFor="login-password" className={fieldLabel}>Password</label>
+          <input
+            id="login-password"
+            type="password"
+            autoComplete="current-password"
+            value={memberPassword}
+            onChange={(e) => setMemberPassword(e.target.value)}
+            className={fieldInput}
+            placeholder="••••••••"
+          />
+        </div>
 
-      <div style={{ marginTop: 14 }}>
-          <form
-            onSubmit={async (e) => {
-              e.preventDefault();
-              setFormError(null);
-              try {
-                await login({
-                  memberNick: memberNick.trim(),
-                  memberPassword,
-                }).unwrap();
-                navigate("/", { replace: true });
-              } catch (err) {
-                setFormError(errorMessage(err));
-              }
-            }}
-          >
-            <label
-              style={{
-                display: "block",
-                marginBottom: "6px",
-                color: "var(--text-muted)",
-              }}
-            >
-              Nick
-            </label>
-            <input
-              value={memberNick}
-              onChange={(e) => setMemberNick(e.target.value)}
-              style={{
-                width: "100%",
-                height: 40,
-                padding: "0 12px",
-                borderRadius: "var(--radius-sm)",
-                border: "1px solid rgba(16,185,129,0.35)",
-                background: "var(--bg-card)",
-                color: "var(--text-main)",
-              }}
-              autoComplete="username"
-            />
+        {formError && (
+          <div role="alert" className="rounded-xl bg-destructive/10 px-4 py-3 text-sm font-medium text-destructive">
+            {formError}
+          </div>
+        )}
 
-            <div style={{ height: 12 }} />
+        <button type="submit" disabled={isLoading} className="btn-pill h-12 w-full text-base disabled:opacity-60">
+          {isLoading ? "Logging in…" : "Log in"} <ArrowRight className="h-4 w-4" />
+        </button>
 
-            <label
-              style={{
-                display: "block",
-                marginBottom: 6,
-                color: "var(--text-muted)",
-              }}
-            >
-              Password
-            </label>
-            <input
-              value={memberPassword}
-              onChange={(e) => setMemberPassword(e.target.value)}
-              type="password"
-              style={{
-                width: "100%",
-                height: 40,
-                padding: "0 12px",
-                borderRadius: "var(--radius-sm)",
-                border: "1px solid rgba(16,185,129,0.35)",
-                background: "var(--bg-card)",
-                color: "var(--text-main)",
-              }}
-              autoComplete="current-password"
-            />
-
-            {formError ? (
-              <div
-                style={{
-                  marginTop: 12,
-                  color: "var(--danger)",
-                  fontWeight: 600,
-                }}
-              >
-                {formError}
-              </div>
-            ) : null}
-
-            <button
-              disabled={isLoading}
-              type="submit"
-              style={{
-                marginTop: 14,
-                width: "100%",
-                height: 42,
-                borderRadius: "var(--radius-sm)",
-                border: "1px solid rgba(16,185,129,0.35)",
-                background: "rgba(16,185,129,0.16)",
-                color: "var(--text-main)",
-                cursor: isLoading ? "not-allowed" : "pointer",
-                fontWeight: 800,
-              }}
-            >
-              {isLoading ? "Logging in…" : "Login"}
-            </button>
-
-            <div style={{ marginTop: 12, color: "var(--text-muted)" }}>
-              Don’t have an account?{" "}
-              <Link to="/signup" style={{ color: "var(--primary)" }}>
-                Sign up
-              </Link>
-            </div>
-          </form>
-      </div>
-    </div>
+        <p className="text-sm text-muted-foreground">
+          New to Unity?{" "}
+          <Link to="/signup" className="font-semibold text-foreground underline underline-offset-4">
+            Create a free account
+          </Link>
+        </p>
+      </form>
+    </AuthShell>
   );
 }

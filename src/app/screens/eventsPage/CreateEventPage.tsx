@@ -295,7 +295,7 @@ export default function CreateEventPage() {
   if (!isOrganizer) {
     return (
       <div className="max-w-4xl mx-auto py-12 space-y-4">
-        <h1 className="text-2xl font-bold text-foreground">
+        <h1 className="display-lg text-foreground">
           Organizer access required
         </h1>
         <p className="text-muted-foreground">
@@ -359,7 +359,7 @@ export default function CreateEventPage() {
             {/* What You Can Do */}
             <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
               <h3 className="font-bold text-foreground mb-4 flex items-center gap-2">
-                <Users className="h-5 w-5 text-blue-600" />
+                <Users className="h-5 w-5 text-olive" />
                 In the Meantime
               </h3>
               <div className="space-y-2 text-sm text-muted-foreground">
@@ -416,7 +416,7 @@ export default function CreateEventPage() {
       <div className="mx-auto max-w-4xl px-4 py-12">
         {/* Hero Section */}
         <div className="mb-12 text-center">
-          <h1 className="text-4xl font-extrabold tracking-tight text-foreground mb-3">
+          <h1 className="display-lg text-foreground mb-3">
             Create a Volunteer Event
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -515,7 +515,7 @@ export default function CreateEventPage() {
 
                 {/* Calendar Popover */}
                 {showCalendar && (
-                  <div className="absolute top-full mt-2 left-0 bg-card rounded-xl shadow-2xl border border-border p-4 z-50 w-80">
+                  <div className="absolute top-full mt-2 left-0 bg-card rounded-xl shadow-lg border border-border p-4 z-50 w-80">
                     {/* Month Navigation */}
                     <div className="flex items-center justify-between mb-4">
                       <button
@@ -757,7 +757,7 @@ export default function CreateEventPage() {
             <button
               type="submit"
               disabled={createState.isLoading}
-              className="flex-1 inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-primary to-primary/80 px-6 py-3 text-base font-bold text-primary-foreground shadow-lg hover:shadow-xl hover:from-primary/90 hover:to-primary/70 disabled:opacity-60 transition-all"
+              className="flex-1 inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-primary to-primary/80 px-6 py-3 text-base font-bold text-primary-foreground shadow-lg hover:shadow-md hover:from-primary/90 hover:to-primary/70 disabled:opacity-60 transition-all"
             >
               {createState.isLoading
                 ? "Creating Event…"

@@ -1,3 +1,4 @@
+import { PageHeader } from "@/libs/components/common/Headers";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useGetEventsQuery } from "../../services/eventsApi";
@@ -41,15 +42,15 @@ import {
 // Common style constants for better readability
 const STYLES = {
   button:
-    "inline-flex h-11 items-center gap-2 rounded-[var(--radius-lg)] border border-border bg-background/40 px-4 font-semibold text-foreground hover:bg-background/60 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0",
+    "inline-flex h-11 items-center gap-2 rounded-2xl border border-border bg-background px-4 font-semibold text-foreground hover:bg-background transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0",
   filterButton:
-    "h-11 rounded-[var(--radius-lg)] border border-border bg-background/40 text-foreground hover:bg-background/60 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0",
+    "h-11 rounded-2xl border border-border bg-background text-foreground hover:bg-background transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0",
   input:
-    "h-11 w-full rounded-[var(--radius-lg)] border border-border bg-background/40 px-4 text-foreground outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0",
+    "h-11 w-full rounded-2xl border border-border bg-background px-4 text-foreground outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0",
   presetButton:
-    "h-8 px-2 rounded-lg border border-border bg-background/40 text-xs font-medium text-foreground hover:bg-background/60 transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-ring",
+    "h-8 px-2 rounded-lg border border-border bg-background text-xs font-medium text-foreground hover:bg-background transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-ring",
   paginationButton:
-    "inline-flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-background/40 text-foreground hover:bg-background/60 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0",
+    "inline-flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-background text-foreground hover:bg-background transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0",
 } as const;
 
 const ORDER_OPTIONS: { label: string; value: string }[] = [
@@ -429,16 +430,13 @@ export default function EventsPage() {
 
   return (
     <div ref={pageTopRef}>
-      <div className="mb-4">
-        <h1 className="m-0 text-2xl font-extrabold tracking-tight text-foreground">
-          Events
-        </h1>
-        <div className="mt-1 text-sm text-muted-foreground">
-          Discover events created by verified organizations.
-        </div>
-      </div>
+      <PageHeader
+        eyebrow="Events"
+        title="Volunteer events in Seoul."
+        lead="Every event is published by a verified organization. Filter by date, search a cause and apply in one tap."
+      />
 
-      <div className="mb-6 rounded-[var(--radius-lg)] border border-border bg-card/30 p-4 shadow-sm backdrop-blur relative z-10">
+      <div className="mb-10 rounded-2xl bg-muted p-3 md:p-4 relative z-10">
         <div className="flex flex-wrap items-center gap-3">
           {/* Search Input */}
           <div className="relative min-w-[260px] flex-1">
@@ -471,26 +469,26 @@ export default function EventsPage() {
 
             {/* Start Date Calendar Popover */}
             {showStartCalendar && (
-              <div className="absolute top-full mt-2 left-0 bg-card rounded-xl shadow-2xl border border-border p-4 z-[9999] w-80">
+              <div className="absolute top-full mt-2 left-0 bg-card rounded-xl shadow-lg border border-border p-4 z-[9999] w-80">
                 {/* Quick date range presets for common selections */}
                 <div className="grid grid-cols-3 gap-2 mb-4">
                   <button
                     onClick={setToday}
-                    className="h-8 px-2 rounded-lg border border-border bg-background/40 text-xs font-medium text-foreground hover:bg-background/60 transition-colors"
+                    className="h-8 px-2 rounded-lg border border-border bg-background text-xs font-medium text-foreground hover:bg-background transition-colors"
                     title="Set dates to today"
                   >
                     Today
                   </button>
                   <button
                     onClick={setThisWeek}
-                    className="h-8 px-2 rounded-lg border border-border bg-background/40 text-xs font-medium text-foreground hover:bg-background/60 transition-colors"
+                    className="h-8 px-2 rounded-lg border border-border bg-background text-xs font-medium text-foreground hover:bg-background transition-colors"
                     title="Set dates to this week"
                   >
                     This Week
                   </button>
                   <button
                     onClick={setThisMonth}
-                    className="h-8 px-2 rounded-lg border border-border bg-background/40 text-xs font-medium text-foreground hover:bg-background/60 transition-colors"
+                    className="h-8 px-2 rounded-lg border border-border bg-background text-xs font-medium text-foreground hover:bg-background transition-colors"
                     title="Set dates to this month"
                   >
                     This Month
@@ -583,26 +581,26 @@ export default function EventsPage() {
 
             {/* End Date Calendar Popover */}
             {showEndCalendar && (
-              <div className="absolute top-full mt-2 left-0 bg-card rounded-xl shadow-2xl border border-border p-4 z-[9999] w-80">
+              <div className="absolute top-full mt-2 left-0 bg-card rounded-xl shadow-lg border border-border p-4 z-[9999] w-80">
                 {/* Quick Presets */}
                 <div className="grid grid-cols-3 gap-2 mb-4">
                   <button
                     onClick={setToday}
-                    className="h-8 px-2 rounded-lg border border-border bg-background/40 text-xs font-medium text-foreground hover:bg-background/60 transition-colors"
+                    className="h-8 px-2 rounded-lg border border-border bg-background text-xs font-medium text-foreground hover:bg-background transition-colors"
                     title="Set dates to today"
                   >
                     Today
                   </button>
                   <button
                     onClick={setThisWeek}
-                    className="h-8 px-2 rounded-lg border border-border bg-background/40 text-xs font-medium text-foreground hover:bg-background/60 transition-colors"
+                    className="h-8 px-2 rounded-lg border border-border bg-background text-xs font-medium text-foreground hover:bg-background transition-colors"
                     title="Set dates to this week"
                   >
                     This Week
                   </button>
                   <button
                     onClick={setThisMonth}
-                    className="h-8 px-2 rounded-lg border border-border bg-background/40 text-xs font-medium text-foreground hover:bg-background/60 transition-colors"
+                    className="h-8 px-2 rounded-lg border border-border bg-background text-xs font-medium text-foreground hover:bg-background transition-colors"
                     title="Set dates to this month"
                   >
                     This Month
@@ -690,7 +688,7 @@ export default function EventsPage() {
                 dispatch(setOrderAction(nextOrder));
                 dispatch(setDirectionAction(nextDirection));
               }}
-              className="h-11 w-[170px] appearance-none rounded-[var(--radius-lg)] border border-border bg-background/40 px-3 pr-9 text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0"
+              className="h-11 w-[170px] appearance-none rounded-2xl border border-border bg-background px-3 pr-9 text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0"
               aria-label="Sort events by"
             >
               {ORDER_OPTIONS.map((opt) => (
@@ -706,10 +704,10 @@ export default function EventsPage() {
           <button
             type="button"
             disabled={!isAuthenticated}
-            className={`inline-flex h-11 items-center gap-2 rounded-[var(--radius-lg)] border px-4 transition-colors ${
+            className={`inline-flex h-11 items-center gap-2 rounded-2xl border px-4 transition-colors ${
               showLikedOnly
                 ? "border-primary bg-primary/10 text-primary hover:bg-primary/20"
-                : "border-border bg-background/40 text-foreground hover:bg-background/60"
+                : "border-border bg-background text-foreground hover:bg-background"
             } disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0`}
             onClick={() => dispatch(setShowLikedOnlyAction(!showLikedOnly))}
             title={
@@ -729,7 +727,7 @@ export default function EventsPage() {
           {/* Direction Toggle */}
           <button
             type="button"
-            className="inline-flex h-11 w-12 items-center justify-center rounded-[var(--radius-lg)] border border-border bg-background/40 text-foreground hover:bg-background/60 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0"
+            className="inline-flex h-11 w-12 items-center justify-center rounded-2xl border border-border bg-background text-foreground hover:bg-background transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0"
             onClick={() =>
               dispatch(setDirectionAction(direction === "asc" ? "desc" : "asc"))
             }
@@ -771,9 +769,9 @@ export default function EventsPage() {
 
       {isLoading ? (
         <div className="space-y-6">
-          <div className="flex flex-wrap items-center justify-between gap-3 rounded-[var(--radius-lg)] border border-border bg-card/30 p-4 shadow-sm">
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border bg-card p-4 shadow-sm">
             <div className="flex items-center gap-3">
-              <div className="inline-flex h-10 w-10 items-center justify-center rounded-[var(--radius-lg)] border border-border bg-background/30">
+              <div className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-border bg-background">
                 <LoaderCircle className="h-5 w-5 animate-spin text-primary" />
               </div>
               <div>
@@ -796,16 +794,16 @@ export default function EventsPage() {
             {Array.from({ length: 6 }).map((_, idx) => (
               <div
                 key={idx}
-                className="flex h-full flex-col overflow-hidden rounded-[var(--radius-lg)] border border-border bg-card/20 shadow-sm"
+                className="flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm"
               >
                 <div className="animate-pulse p-4">
-                  <div className="h-40 w-full rounded-[var(--radius-lg)] bg-background/30" />
-                  <div className="mt-4 h-5 w-3/4 rounded bg-background/30" />
+                  <div className="h-40 w-full rounded-2xl bg-background" />
+                  <div className="mt-4 h-5 w-3/4 rounded bg-background" />
                   <div className="mt-3 h-4 w-full rounded bg-background/20" />
                   <div className="mt-2 h-4 w-5/6 rounded bg-background/20" />
                   <div className="mt-5 flex items-center justify-between">
-                    <div className="h-9 w-28 rounded-[var(--radius-lg)] bg-background/20" />
-                    <div className="h-9 w-12 rounded-[var(--radius-lg)] bg-background/20" />
+                    <div className="h-9 w-28 rounded-2xl bg-background/20" />
+                    <div className="h-9 w-12 rounded-2xl bg-background/20" />
                   </div>
                 </div>
               </div>
@@ -902,7 +900,7 @@ export default function EventsPage() {
                   className={`h-10 w-10 rounded-lg border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0 ${
                     pageNum === page
                       ? "border-primary bg-primary/20 text-primary font-semibold"
-                      : "border-border bg-background/40 text-foreground hover:bg-background/60"
+                      : "border-border bg-background text-foreground hover:bg-background"
                   }`}
                   aria-label={`Go to page ${pageNum}`}
                   aria-current={pageNum === page ? "page" : undefined}

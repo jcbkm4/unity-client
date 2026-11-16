@@ -95,6 +95,7 @@ export interface WeeklyPopularEventDto extends EventDto {
 
 // ============ GROUPS API ============
 export interface GroupDto extends Group {
+  groupCategories?: string[];
   memberCount?: number;
   memberData?: MemberData;
 }

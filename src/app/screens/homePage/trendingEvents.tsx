@@ -1,10 +1,11 @@
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
-import { Eye } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 import { useGetEventsQuery } from "../../services/eventsApi";
 import { useCheckLikesBatchQuery } from "../../services/likesApi";
 import EventCard from "../eventsPage/EventCard";
+import { SectionHeader } from "@/libs/components/common/Headers";
 
 export default function TrendingEventsSection() {
   const { data, isLoading, isError } = useGetEventsQuery({
@@ -14,59 +15,36 @@ export default function TrendingEventsSection() {
     direction: "desc",
   });
 
-  const eventIds = useMemo(
-    () => data?.items?.map((e) => e._id) ?? [],
-    [data?.items],
-  );
+  const eventIds = useMemo(() => data?.items?.map((e) => e._id) ?? [], [data]);
   const { data: likesData } = useCheckLikesBatchQuery(
     { likeGroup: "EVENT", likeRefIds: eventIds },
     { skip: eventIds.length === 0 },
   );
-
-  const likedSet = useMemo(() => {
-    const ids = likesData?.likedRefIds ?? [];
-    return new Set(ids);
-  }, [likesData]);
+  const likedSet = useMemo(() => new Set(likesData?.likedRefIds ?? []), [likesData]);
 
   return (
-    <section className="mb-7">
-      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <div className="flex items-center gap-2">
-            <Eye className="h-5 w-5 text-primary" />
-            <h2 className="m-0 text-[22px] font-extrabold tracking-tight text-foreground">
-              Trending events
-            </h2>
-          </div>
-          <p className="mt-2 text-sm text-muted-foreground">
-            The 4 most viewed events right now.
-          </p>
-        </div>
-
-        <Link
-          to="/events?order=eventViews"
-          className="inline-flex items-center justify-center rounded-[var(--radius-lg)] border border-border bg-background/40 px-4 py-2 text-sm font-semibold text-foreground hover:bg-background/60"
-        >
-          See all
-          <span className="ml-2 text-primary" aria-hidden="true">
-            →
-          </span>
-        </Link>
-      </div>
-
-      <div className="rounded-[var(--radius-lg)] border border-border bg-card/30 p-4 shadow-sm">
+    <section className="section-y bg-background">
+      <div className="content-container">
+        <SectionHeader
+          eyebrow="Trending"
+          title="Most viewed across Seoul."
+          lead="From river cleanups to reading clubs: the events people are looking at most."
+          action={
+            <Link to="/events?order=eventViews" className="btn-pill btn-pill-outline">
+              See trending <ArrowRight className="h-4 w-4" />
+            </Link>
+          }
+        />
         {isLoading ? (
-          <div className="text-muted-foreground">Loading…</div>
+          <div className="text-muted-foreground">Loading events…</div>
         ) : isError ? (
-          <div className="text-destructive">Failed to load events.</div>
+          <div className="text-destructive">Events could not be loaded.</div>
         ) : !data?.items?.length ? (
-          <div className="text-muted-foreground">No events yet.</div>
+          <div className="rounded-2xl bg-muted p-8 text-muted-foreground">No events yet.</div>
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
             {data.items.map((event) => (
-              <div key={event._id} className="h-full">
-                <EventCard event={event} likedByMe={likedSet.has(event._id)} />
-              </div>
+              <EventCard key={event._id} event={event} likedByMe={likedSet.has(event._id)} />
             ))}
           </div>
         )}

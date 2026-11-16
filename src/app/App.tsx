@@ -22,16 +22,21 @@ import LoginPage from "./screens/authPage/LoginPage.tsx";
 import SignupPage from "./screens/authPage/SignupPage.tsx";
 
 function HomeLayout() {
-  const location = useLocation();
-  void location;
+  const { pathname } = useLocation();
+  // The home page is built from full-bleed sections; every other page sits in the content column.
+  const fullBleed = pathname === "/";
 
   return (
     <>
       <Header />
       <main className="flex-1 w-full flex flex-col">
-        <div className="content-container py-6">
+        {fullBleed ? (
           <Outlet />
-        </div>
+        ) : (
+          <div className="content-container pt-10 pb-24 md:pt-14">
+            <Outlet />
+          </div>
+        )}
       </main>
       <Footer />
     </>
